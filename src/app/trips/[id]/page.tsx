@@ -67,9 +67,13 @@ export default async function TripDetailPage({
       </Link>
 
       <div className="mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm">
-        <div className="flex items-center gap-3 bg-gradient-to-br from-primary to-indigo-700 p-6 text-primary-foreground">
-          <Plane className="size-6" />
-          <h1 className="text-2xl font-bold">{directionLabel(trip.direction)}</h1>
+        <div className="border-b bg-accent/40 p-6">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+            <Plane className="size-3.5 text-primary" /> Air cargo space
+          </span>
+          <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            {directionLabel(trip.direction)}
+          </h1>
         </div>
 
         <div className="space-y-6 p-6">

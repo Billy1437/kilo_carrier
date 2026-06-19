@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Prisma, type Direction } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { BrowseFilters } from "@/components/browse-filters";
+import { BrowseControls } from "@/components/browse-filters";
 import { TripCard, type TripCardData } from "@/components/trip-card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -57,53 +57,82 @@ export default async function BrowsePage({
     telegram: t.telegram,
   }));
 
+  // Dashboard stats over all active trips (unfiltered)
+  const activeWhere: Prisma.TripWhereInput = { expiresAt: { gt: new Date() } };
+  const soonDate = new Date();
+  soonDate.setDate(soonDate.getDate() + 3);
+  const [total, toBkk, toYgn, soon] = await Promise.all([
+    prisma.trip.count({ where: activeWhere }),
+    prisma.trip.count({ where: { ...activeWhere, direction: "YGN_TO_BKK" } }),
+    prisma.trip.count({ where: { ...activeWhere, direction: "BKK_TO_YGN" } }),
+    prisma.trip.count({
+      where: { ...activeWhere, travelDate: { lte: soonDate } },
+    }),
+  ]);
+  const stats = [
+    { label: "Active trips", value: total, tint: "bg-card" },
+    { label: "To Bangkok", value: toBkk, tint: "bg-sky/40" },
+    { label: "To Yangon", value: toYgn, tint: "bg-peach/40" },
+    { label: "Departing soon", value: soon, tint: "bg-lime/40" },
+  ];
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-8 rounded-2xl bg-gradient-to-br from-primary to-indigo-700 p-8 text-primary-foreground">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Travel light. Send smart.
-        </h1>
-        <p className="mt-2 max-w-xl text-primary-foreground/90">
-          Find a traveller carrying cargo between Yangon and Bangkok — or post
-          your own spare luggage space.
-        </p>
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Browse trips
+          </h1>
+          <p className="mt-1.5 text-muted-foreground">
+            Cargo space between Yangon and Bangkok. Travel light, send smart.
+          </p>
+        </div>
         <Link
           href="/post"
-          className={cn(
-            buttonVariants({ variant: "secondary" }),
-            "mt-5 bg-white text-primary hover:bg-white/90",
-          )}
+          className={cn(buttonVariants({ size: "lg" }), "rounded-full px-6 shadow-sm")}
         >
           Post a trip
         </Link>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[260px_1fr]">
-        <BrowseFilters />
+      <div className="mb-7 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {stats.map((s) => (
+          <div
+            key={s.label}
+            className={cn("rounded-3xl p-5 shadow-sm", s.tint)}
+          >
+            <p className="text-sm font-medium text-muted-foreground">{s.label}</p>
+            <p className="mt-1 text-3xl font-bold tracking-tight">{s.value}</p>
+          </div>
+        ))}
+      </div>
 
-        <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            {trips.length} {trips.length === 1 ? "trip" : "trips"} available
-          </p>
+      <BrowseControls total={trips.length} />
 
-          {trips.length === 0 ? (
-            <div className="rounded-xl border border-dashed bg-card p-12 text-center">
-              <p className="font-medium">No trips match your filters yet.</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Try clearing filters, or be the first to{" "}
-                <Link
-                  href="/post"
-                  className="text-primary underline-offset-4 hover:underline"
-                >
-                  post a trip
-                </Link>
-                .
-              </p>
-            </div>
-          ) : (
-            trips.map((trip) => <TripCard key={trip.id} trip={trip} />)
-          )}
-        </div>
+      <div className="mt-6">
+        {trips.length === 0 ? (
+          <div className="rounded-2xl border border-dashed bg-card p-16 text-center">
+            <p className="font-display text-lg font-semibold">
+              No trips match your filters yet.
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Try clearing filters, or be the first to{" "}
+              <Link
+                href="/post"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
+                post a trip
+              </Link>
+              .
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {trips.map((trip) => (
+              <TripCard key={trip.id} trip={trip} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,109 +2,137 @@
 
 import { useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Calendar, Luggage, Coins, X } from "lucide-react";
 import { DIRECTIONS } from "@/lib/trips";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
-const fieldClass =
-  "flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
+const DIRECTION_TABS = [
+  { value: "", label: "All trips" },
+  ...DIRECTIONS.map((d) => ({ value: d.value, label: d.short })),
+];
 
-export function BrowseFilters() {
+export function BrowseControls({ total }: { total: number }) {
   const router = useRouter();
   const params = useSearchParams();
 
-  const update = useCallback(
-    (key: string, value: string) => {
+  const setParam = useCallback(
+    (patch: Record<string, string>) => {
       const next = new URLSearchParams(params.toString());
-      if (value) next.set(key, value);
-      else next.delete(key);
+      for (const [k, v] of Object.entries(patch)) {
+        if (v) next.set(k, v);
+        else next.delete(k);
+      }
       router.push(`/?${next.toString()}`, { scroll: false });
     },
     [params, router],
   );
 
   const get = (k: string) => params.get(k) ?? "";
+  const activeDir = get("direction");
+  const hasFilters = ["direction", "date", "minKg", "maxPrice"].some((k) =>
+    params.get(k),
+  );
 
   return (
-    <aside className="space-y-6 rounded-xl border bg-card p-5">
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold">Filter</h2>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 px-2 text-xs text-primary"
-          onClick={() => router.push("/", { scroll: false })}
-        >
-          Clear all
-        </Button>
+    <div className="space-y-4">
+      {/* Pill filter bar */}
+      <div className="flex flex-wrap items-center gap-3 rounded-3xl bg-card p-3 shadow-sm">
+        <Pill icon={Calendar} label="Departing">
+          <input
+            type="date"
+            value={get("date")}
+            onChange={(e) => setParam({ date: e.target.value })}
+            className="bg-transparent text-sm outline-none"
+          />
+        </Pill>
+
+        <Pill icon={Luggage} label="Min kg">
+          <input
+            type="number"
+            min={1}
+            max={50}
+            placeholder="any"
+            value={get("minKg")}
+            onChange={(e) => setParam({ minKg: e.target.value })}
+            className="w-16 bg-transparent text-sm outline-none"
+          />
+        </Pill>
+
+        <Pill icon={Coins} label="Max / kg">
+          <input
+            type="number"
+            min={0}
+            placeholder="any"
+            value={get("maxPrice")}
+            onChange={(e) => setParam({ maxPrice: e.target.value })}
+            className="w-20 bg-transparent text-sm outline-none"
+          />
+        </Pill>
+
+        {hasFilters && (
+          <button
+            onClick={() => router.push("/", { scroll: false })}
+            className="ml-auto inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            <X className="size-4" /> Clear
+          </button>
+        )}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="f-direction">Direction</Label>
-        <select
-          id="f-direction"
-          className={fieldClass}
-          value={get("direction")}
-          onChange={(e) => update("direction", e.target.value)}
-        >
-          <option value="">Any direction</option>
-          {DIRECTIONS.map((d) => (
-            <option key={d.value} value={d.value}>
-              {d.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Direction tabs + sort */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">
+          {DIRECTION_TABS.map((t) => {
+            const active = activeDir === t.value;
+            return (
+              <button
+                key={t.label}
+                onClick={() => setParam({ direction: t.value })}
+                className={
+                  active
+                    ? "rounded-full bg-sky px-4 py-2 text-sm font-semibold text-sky-foreground shadow-sm"
+                    : "rounded-full bg-card px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm transition hover:text-foreground"
+                }
+              >
+                {t.label}
+                {t.value === "" && (
+                  <span className="ml-1 text-xs opacity-70">({total})</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="f-date">Departing on/after</Label>
-        <Input
-          id="f-date"
-          type="date"
-          value={get("date")}
-          onChange={(e) => update("date", e.target.value)}
-        />
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          Sort by
+          <select
+            value={get("sort")}
+            onChange={(e) => setParam({ sort: e.target.value })}
+            className="rounded-full border bg-card px-3 py-1.5 text-sm font-medium text-foreground outline-none"
+          >
+            <option value="newest">Newest</option>
+            <option value="soonest">Soonest</option>
+            <option value="cheapest">Cheapest</option>
+          </select>
+        </label>
       </div>
+    </div>
+  );
+}
 
-      <div className="space-y-2">
-        <Label htmlFor="f-minKg">Minimum kg</Label>
-        <Input
-          id="f-minKg"
-          type="number"
-          min={1}
-          max={50}
-          placeholder="e.g. 5"
-          value={get("minKg")}
-          onChange={(e) => update("minKg", e.target.value)}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="f-maxPrice">Max price / kg</Label>
-        <Input
-          id="f-maxPrice"
-          type="number"
-          min={0}
-          placeholder="any"
-          value={get("maxPrice")}
-          onChange={(e) => update("maxPrice", e.target.value)}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="f-sort">Sort by</Label>
-        <select
-          id="f-sort"
-          className={fieldClass}
-          value={get("sort")}
-          onChange={(e) => update("sort", e.target.value)}
-        >
-          <option value="newest">Newest</option>
-          <option value="soonest">Soonest departure</option>
-          <option value="cheapest">Cheapest</option>
-        </select>
-      </div>
-    </aside>
+function Pill({
+  icon: Icon,
+  label,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="inline-flex items-center gap-2 rounded-full bg-muted px-4 py-2">
+      <Icon className="size-4 text-foreground/60" />
+      <span className="text-xs font-medium text-muted-foreground">{label}</span>
+      {children}
+    </div>
   );
 }
