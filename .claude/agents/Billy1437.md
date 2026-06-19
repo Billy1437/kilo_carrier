@@ -16,8 +16,10 @@ cargo-courier marketplace (Yangon ↔ Bangkok) and review your own work before h
 
 ## Conventions you must follow
 
-- **Reads** in Server Components via `lib/supabase/server.ts`; **writes** in Server Actions
-  (`'use server'`). Never query the DB directly from a client component.
+- **DB access = Prisma** (`lib/prisma.ts`). Reads in Server Components; writes in Server Actions
+  (`'use server'`). Never query the DB from a client component.
+- **Auth = Supabase** (`lib/supabase/server.ts`). Prisma bypasses RLS, so enforce ownership in code:
+  derive `userId` from the session, and check `row.userId === session user` before update/delete.
 - Forms use **React Hook Form + Zod**; validate on the server action too, not just the client.
 - **Telegram is required** on every trip; Facebook / Viber / WhatsApp are optional and rendered
   only when present.
@@ -31,8 +33,9 @@ Review the diff you just produced and fix issues inline:
 
 - **Correctness:** types check, no obvious runtime errors, edge cases (empty results, expired
   trips, missing optional contacts) handled.
-- **RLS / security:** any new table or query is covered by Row Level Security; no service-role key
-  in client code; user input validated server-side. Posting paths require an authenticated user.
+- **Security:** writes go through server actions that derive `userId` from the session and verify
+  ownership before update/delete (Prisma bypasses RLS); no DB credentials in client code; user input
+  validated server-side. Posting paths require an authenticated user.
 - **Accessibility:** semantic elements, labels tied to inputs, buttons have accessible names,
   contact links have discernible text, sufficient color contrast, keyboard reachable.
 - **Conventions:** matches the skill's data model and patterns; no stray TODOs or dead code.

@@ -16,20 +16,28 @@ Tagline: **"Travel light. Send smart."**
 
 - **Next.js (App Router, TypeScript)** — Server Components for reads, Server Actions for writes
 - **Tailwind CSS v4** (CSS-based `@theme`, no `tailwind.config.ts`) + **shadcn/ui** (base-ui registry)
-- **Supabase** — Postgres, Auth (email/password + Google OAuth), accessed via `@supabase/ssr`
+- **Database: Prisma 6** → Supabase Postgres (via the connection poolers)
+- **Auth: Supabase Auth** (email/password + Google OAuth) via `@supabase/ssr`
 - **React Hook Form + Zod** for forms
 - Deploy target: Vercel
 
 ## Architecture rules
 
-- **Reads** happen in Server Components via `lib/supabase/server.ts` (`createClient()` with `next/headers` cookies).
-- **Writes** happen in Server Actions (`'use server'`), never client-side direct DB calls.
-- A browser client (`lib/supabase/client.ts`) exists only for auth UI (OAuth redirect, sign-out).
-- `middleware.ts` refreshes the session on every request. Never put logic between
-  `createServerClient` and `supabase.auth.getUser()`.
-- **Security lives in RLS**, not in app code. Every table has explicit policies.
+- **DB access = Prisma only.** Import the singleton from `lib/prisma.ts`. Reads in Server
+  Components; writes in Server Actions (`'use server'`). Never query the DB from a client component.
+- **Auth = Supabase.** Server client `lib/supabase/server.ts` (`next/headers` cookies) reads the
+  session; browser client `lib/supabase/client.ts` handles OAuth redirect + sign-out. `middleware.ts`
+  refreshes the session every request — never put logic between `createServerClient` and
+  `supabase.auth.getUser()`.
+- **Security is app-level, not RLS.** Prisma connects through the pooler as the `postgres` role,
+  which **bypasses Row Level Security**. So every write/mutate server action MUST:
+  1. get the authenticated user via the Supabase server client (reject if none for `/post`),
+  2. set `userId` from the session (never trust client-sent ids),
+  3. on update/delete, verify the row's `userId === session user id` before mutating.
+- Prisma connects via `DATABASE_URL` (transaction pooler, `pgbouncer=true`) in `.env`; migrations/
+  `db push` use `DIRECT_URL` (session pooler). Run `npm run db:push` to sync schema.
 
-## Data model — `trips`
+## Data model — `trips` (Prisma model `Trip`, table `trips`)
 
 | column | type | notes |
 |--------|------|-------|
@@ -49,10 +57,10 @@ Tagline: **"Travel light. Send smart."**
 | created_at | timestamptz | default `now()` |
 | expires_at | timestamptz | = travel_date end-of-day; browse filters `expires_at > now()` |
 
-### RLS policies
-- `SELECT` → public (anyone reads)
-- `INSERT` → `auth.uid() = user_id`
-- `UPDATE` / `DELETE` → `auth.uid() = user_id`
+### Ownership rules (enforced in server actions, since Prisma bypasses RLS)
+- Read/list → open to everyone
+- Create → must be logged in; `userId` taken from the session
+- Update / delete → only when row `userId` matches the session user
 
 ## Business rules
 

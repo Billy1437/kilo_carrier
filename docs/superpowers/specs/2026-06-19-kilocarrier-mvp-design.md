@@ -26,18 +26,22 @@ pages, trip editing UI (owner can re-post), profiles beyond the account name.
 
 - Next.js (App Router, TypeScript) — installed via `create-next-app@latest` → **Next 16 + React 19**
 - Tailwind CSS **v4** (CSS `@theme`) + shadcn/ui (base-ui registry)
-- Supabase: Postgres + Auth (email/password + Google OAuth), via `@supabase/ssr`
+- **Database: Prisma 6** → Supabase Postgres (via connection poolers)
+- **Auth: Supabase Auth** (email/password + Google OAuth) via `@supabase/ssr`
 - React Hook Form + Zod
 - Deploy: Vercel
 
 ## Architecture
 
-- **Reads** → Server Components using `lib/supabase/server.ts` (`createServerClient` + `next/headers`).
-- **Writes** → Server Actions (`'use server'`).
-- **Auth UI** → browser client `lib/supabase/client.ts` (Google OAuth redirect, sign-out).
-- `middleware.ts` refreshes the session on every request (no logic between `createServerClient`
-  and `auth.getUser()`).
-- **Security via RLS** on the `trips` table.
+- **DB access = Prisma** (`lib/prisma.ts` singleton). Reads in Server Components, writes in Server
+  Actions (`'use server'`). `DATABASE_URL` = transaction pooler (`pgbouncer=true`); `DIRECT_URL` =
+  session pooler for `db push`/migrations.
+- **Auth = Supabase.** Server client `lib/supabase/server.ts` reads the session; browser client
+  `lib/supabase/client.ts` handles Google OAuth redirect + sign-out. `middleware.ts` refreshes the
+  session every request (no logic between `createServerClient` and `auth.getUser()`).
+- **Security is app-level, not RLS.** Prisma connects as the `postgres` role through the pooler and
+  **bypasses Row Level Security**. Mutating server actions derive `userId` from the session and
+  verify ownership before update/delete. RLS may still be enabled as defense-in-depth.
 
 ## Data model — `trips`
 
@@ -59,10 +63,10 @@ pages, trip editing UI (owner can re-post), profiles beyond the account name.
 | created_at | timestamptz | default `now()` |
 | expires_at | timestamptz | = travel_date at end-of-day; browse filters `expires_at > now()` |
 
-### RLS policies
-- `SELECT` → public (`using (true)`)
-- `INSERT` → `auth.uid() = user_id`
-- `UPDATE` / `DELETE` → `auth.uid() = user_id`
+### Ownership rules (enforced in server actions; Prisma bypasses RLS)
+- Read/list → public
+- Create → must be authenticated; `userId` from session
+- Update / delete → only when `row.userId` === session user id
 
 ## Routes
 
@@ -97,8 +101,8 @@ Direction · travel date (on/after) · minimum available kg · price-per-kg rang
 
 0. Scaffold (Next, shadcn, brand tokens, config files, spec) — *no Supabase keys needed*.
 1. **User creates Supabase project + Google OAuth**, pastes URL/anon key/ref/PAT. *(blocking pause)*
-2. `trips` migration + RLS (via Supabase MCP).
-3. Supabase clients + middleware.
+2. Prisma schema → `trips` table via `prisma db push`.
+3. Prisma client singleton + Supabase auth clients + middleware.
 4. Auth (`/login`, `/auth/callback`).
 5. Features (`/post`, `/`, `/trips/[id]`).
 6. Verify: `npm run build` + manual smoke test.
