@@ -46,8 +46,9 @@ export async function proxy(request: NextRequest) {
   return supabaseResponse;
 }
 
+// Only run on routes that require auth. Public pages (/, /browse, /trips, /login)
+// skip the middleware entirely — no per-navigation auth network call. They read
+// session state cheaply via getClaims() (local JWT) in the header.
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/post/:path*", "/my-trips/:path*"],
 };
