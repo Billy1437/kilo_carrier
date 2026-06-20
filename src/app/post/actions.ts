@@ -9,16 +9,16 @@ import { expiryFromTravelDate } from "@/lib/trips";
 
 export type PostState = { error?: string };
 
-export async function createTrip(
-  _prev: PostState,
-  formData: FormData,
-): Promise<PostState> {
+async function requireUserId(): Promise<string> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=/post");
+  return user.id;
+}
 
+function parseForm(formData: FormData) {
   // Empty strings -> undefined so optional fields validate cleanly.
   const raw = Object.fromEntries(
     Array.from(formData.entries()).map(([k, v]) => [
@@ -26,8 +26,16 @@ export async function createTrip(
       typeof v === "string" && v.trim() === "" ? undefined : v,
     ]),
   );
+  return tripSchema.safeParse(raw);
+}
 
-  const parsed = tripSchema.safeParse(raw);
+export async function createTrip(
+  _prev: PostState,
+  formData: FormData,
+): Promise<PostState> {
+  const userId = await requireUserId();
+
+  const parsed = parseForm(formData);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid form data" };
   }
@@ -36,7 +44,7 @@ export async function createTrip(
 
   const trip = await prisma.trip.create({
     data: {
-      userId: user.id,
+      userId,
       carrierName: d.carrierName,
       direction: d.direction,
       travelDate,
@@ -52,6 +60,61 @@ export async function createTrip(
     },
   });
 
-  revalidatePath("/");
+  revalidatePath("/browse");
   redirect(`/trips/${trip.id}`);
+}
+
+export async function updateTrip(
+  id: string,
+  _prev: PostState,
+  formData: FormData,
+): Promise<PostState> {
+  const userId = await requireUserId();
+
+  const existing = await prisma.trip.findUnique({ where: { id } });
+  if (!existing || existing.userId !== userId) {
+    return { error: "You can only edit your own trips." };
+  }
+
+  const parsed = parseForm(formData);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid form data" };
+  }
+  const d = parsed.data;
+  const travelDate = new Date(d.travelDate);
+
+  await prisma.trip.update({
+    where: { id },
+    data: {
+      carrierName: d.carrierName,
+      direction: d.direction,
+      travelDate,
+      availableKg: d.availableKg,
+      pricePerKg: d.pricePerKg ?? null,
+      itemRestrictions: d.itemRestrictions ?? null,
+      telegram: d.telegram,
+      facebook: d.facebook ?? null,
+      viber: d.viber ?? null,
+      whatsapp: d.whatsapp ?? null,
+      notes: d.notes ?? null,
+      expiresAt: expiryFromTravelDate(travelDate),
+    },
+  });
+
+  revalidatePath("/browse");
+  revalidatePath(`/trips/${id}`);
+  redirect(`/trips/${id}`);
+}
+
+export async function deleteTrip(id: string) {
+  const userId = await requireUserId();
+
+  const existing = await prisma.trip.findUnique({ where: { id } });
+  if (!existing || existing.userId !== userId) {
+    redirect(`/trips/${id}`);
+  }
+
+  await prisma.trip.delete({ where: { id } });
+  revalidatePath("/browse");
+  redirect("/my-trips");
 }

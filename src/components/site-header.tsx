@@ -1,42 +1,37 @@
 import Link from "next/link";
-import { Boxes, Plus, Compass } from "lucide-react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/actions";
+import { MainNav } from "@/components/main-nav";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export async function SiteHeader() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const name = user?.email?.split("@")[0];
+  const { data } = await supabase.auth.getClaims();
+  const email = data?.claims?.email as string | undefined;
+  const user = email ? { email } : null;
+  const name = email?.split("@")[0];
 
   return (
-    <header className="sticky top-0 z-40 bg-[oklch(0.93_0.022_262)]/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 bg-cream/80 backdrop-blur-md">
       <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="grid size-10 place-items-center rounded-2xl bg-primary text-primary-foreground">
-              <Boxes className="size-5" />
+          <Link href="/" className="flex items-center gap-2">
+            <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white shadow-sm">
+              <Image
+                src="/logo_design.png"
+                alt="KiloCarrier logo"
+                width={40}
+                height={40}
+                priority
+                className="size-full scale-[1.9] object-contain"
+              />
             </span>
             <span className="text-lg font-bold tracking-tight">KiloCarrier</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 rounded-full bg-card/70 p-1 shadow-sm sm:flex">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 rounded-full bg-sky px-4 py-2 text-sm font-semibold text-sky-foreground"
-            >
-              <Compass className="size-4" /> Browse
-            </Link>
-            <Link
-              href="/post"
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
-            >
-              <Plus className="size-4" /> Post a trip
-            </Link>
-          </nav>
+          <MainNav authed={!!user} />
         </div>
 
         <div className="flex items-center gap-3">
@@ -58,20 +53,12 @@ export async function SiteHeader() {
               </Button>
             </form>
           ) : (
-            <>
-              <Link
-                href="/login"
-                className="hidden text-sm font-semibold text-muted-foreground hover:text-foreground sm:inline"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/post"
-                className={cn(buttonVariants(), "rounded-full px-5 shadow-sm")}
-              >
-                Post a trip
-              </Link>
-            </>
+            <Link
+              href="/login"
+              className={cn(buttonVariants(), "rounded-full px-6 shadow-sm")}
+            >
+              Log in
+            </Link>
           )}
         </div>
       </div>

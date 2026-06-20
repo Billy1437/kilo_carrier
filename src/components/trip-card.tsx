@@ -83,7 +83,7 @@ export function TripCard({ trip }: { trip: TripCardData }) {
           <p className="text-xs text-muted-foreground">Price</p>
           {trip.pricePerKg ? (
             <p className="text-xl font-bold tracking-tight">
-              {trip.pricePerKg}
+              ฿{trip.pricePerKg}
               <span className="text-sm font-medium text-muted-foreground">
                 {" "}
                 / kg

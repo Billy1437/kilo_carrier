@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PostTripForm } from "@/components/post-trip-form";
+import { TripForm } from "@/components/trip-form";
 
 export const metadata = { title: "Post a trip — KiloCarrier" };
 
@@ -17,13 +17,15 @@ export default async function PostPage() {
     "";
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-3xl font-bold tracking-tight">Post a trip</h1>
-      <p className="mt-1 text-muted-foreground">
-        List your spare luggage space. Senders will contact you directly.
+    <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        Post a trip
+      </h1>
+      <p className="mt-1.5 text-muted-foreground">
+        List your spare luggage space. Senders contact you directly.
       </p>
       <div className="mt-8">
-        <PostTripForm defaultName={defaultName} />
+        <TripForm mode="create" defaultName={defaultName} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Calendar, Luggage, Coins, X } from "lucide-react";
 import { DIRECTIONS } from "@/lib/trips";
@@ -13,20 +13,47 @@ const DIRECTION_TABS = [
 export function BrowseControls({ total }: { total: number }) {
   const router = useRouter();
   const params = useSearchParams();
+  const get = useCallback((k: string) => params.get(k) ?? "", [params]);
 
-  const setParam = useCallback(
+  // Apply a set of param changes to the URL (replace = no history spam).
+  const apply = useCallback(
     (patch: Record<string, string>) => {
       const next = new URLSearchParams(params.toString());
       for (const [k, v] of Object.entries(patch)) {
         if (v) next.set(k, v);
         else next.delete(k);
       }
-      router.push(`/?${next.toString()}`, { scroll: false });
+      const qs = next.toString();
+      router.replace(qs ? `/browse?${qs}` : "/browse", { scroll: false });
     },
     [params, router],
   );
 
-  const get = (k: string) => params.get(k) ?? "";
+  // Local state for the typed inputs so typing is instant; push is debounced.
+  const [inputs, setInputs] = useState({
+    date: get("date"),
+    minKg: get("minKg"),
+    maxPrice: get("maxPrice"),
+  });
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Keep local inputs in sync when the URL changes externally (Clear, back/fwd).
+  useEffect(() => {
+    setInputs({ date: get("date"), minKg: get("minKg"), maxPrice: get("maxPrice") });
+  }, [get]);
+
+  const onInput = (key: "date" | "minKg" | "maxPrice", value: string) => {
+    setInputs((s) => ({ ...s, [key]: value }));
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => apply({ [key]: value }), 400);
+  };
+
+  const clearAll = () => {
+    if (timer.current) clearTimeout(timer.current);
+    setInputs({ date: "", minKg: "", maxPrice: "" });
+    router.replace("/browse", { scroll: false });
+  };
+
   const activeDir = get("direction");
   const hasFilters = ["direction", "date", "minKg", "maxPrice"].some((k) =>
     params.get(k),
@@ -39,8 +66,8 @@ export function BrowseControls({ total }: { total: number }) {
         <Pill icon={Calendar} label="Departing">
           <input
             type="date"
-            value={get("date")}
-            onChange={(e) => setParam({ date: e.target.value })}
+            value={inputs.date}
+            onChange={(e) => onInput("date", e.target.value)}
             className="bg-transparent text-sm outline-none"
           />
         </Pill>
@@ -51,8 +78,8 @@ export function BrowseControls({ total }: { total: number }) {
             min={1}
             max={50}
             placeholder="any"
-            value={get("minKg")}
-            onChange={(e) => setParam({ minKg: e.target.value })}
+            value={inputs.minKg}
+            onChange={(e) => onInput("minKg", e.target.value)}
             className="w-16 bg-transparent text-sm outline-none"
           />
         </Pill>
@@ -62,15 +89,15 @@ export function BrowseControls({ total }: { total: number }) {
             type="number"
             min={0}
             placeholder="any"
-            value={get("maxPrice")}
-            onChange={(e) => setParam({ maxPrice: e.target.value })}
+            value={inputs.maxPrice}
+            onChange={(e) => onInput("maxPrice", e.target.value)}
             className="w-20 bg-transparent text-sm outline-none"
           />
         </Pill>
 
         {hasFilters && (
           <button
-            onClick={() => router.push("/", { scroll: false })}
+            onClick={clearAll}
             className="ml-auto inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             <X className="size-4" /> Clear
@@ -86,7 +113,7 @@ export function BrowseControls({ total }: { total: number }) {
             return (
               <button
                 key={t.label}
-                onClick={() => setParam({ direction: t.value })}
+                onClick={() => apply({ direction: t.value })}
                 className={
                   active
                     ? "rounded-full bg-sky px-4 py-2 text-sm font-semibold text-sky-foreground shadow-sm"
@@ -106,7 +133,7 @@ export function BrowseControls({ total }: { total: number }) {
           Sort by
           <select
             value={get("sort")}
-            onChange={(e) => setParam({ sort: e.target.value })}
+            onChange={(e) => apply({ sort: e.target.value })}
             className="rounded-full border bg-card px-3 py-1.5 text-sm font-medium text-foreground outline-none"
           >
             <option value="newest">Newest</option>

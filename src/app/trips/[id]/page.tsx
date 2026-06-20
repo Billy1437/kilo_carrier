@@ -10,8 +10,12 @@ import {
   MessageCircle,
   Phone,
   ExternalLink,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { createClient } from "@/lib/supabase/server";
+import { deleteTrip } from "@/app/post/actions";
 import {
   directionLabel,
   formatDate,
@@ -20,8 +24,9 @@ import {
   viberLink,
   facebookLink,
 } from "@/lib/trips";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CopyLinkButton } from "@/components/copy-link-button";
+import { cn } from "@/lib/utils";
 
 export default async function TripDetailPage({
   params,
@@ -32,6 +37,10 @@ export default async function TripDetailPage({
 
   const trip = await prisma.trip.findUnique({ where: { id } }).catch(() => null);
   if (!trip) notFound();
+
+  const supabase = await createClient();
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const isOwner = claimsData?.claims?.sub === trip.userId;
 
   const expired = trip.expiresAt.getTime() < Date.now();
 
@@ -60,7 +69,7 @@ export default async function TripDetailPage({
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <Link
-        href="/"
+        href="/browse"
         className="text-sm text-muted-foreground hover:text-foreground"
       >
         ← Back to browse
@@ -68,9 +77,34 @@ export default async function TripDetailPage({
 
       <div className="mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm">
         <div className="border-b bg-accent/40 p-6">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm">
-            <Plane className="size-3.5 text-primary" /> Air cargo space
-          </span>
+          <div className="flex items-start justify-between gap-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+              <Plane className="size-3.5 text-primary" /> Air cargo space
+            </span>
+            {isOwner && (
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/trips/${trip.id}/edit`}
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "sm" }),
+                    "rounded-full bg-background",
+                  )}
+                >
+                  <Pencil className="size-4" /> Edit
+                </Link>
+                <form action={deleteTrip.bind(null, trip.id)}>
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    size="sm"
+                    className="rounded-full"
+                  >
+                    <Trash2 className="size-4" /> Delete
+                  </Button>
+                </form>
+              </div>
+            )}
+          </div>
           <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
             {directionLabel(trip.direction)}
           </h1>
@@ -96,7 +130,7 @@ export default async function TripDetailPage({
               {trip.availableKg.toString()} kg
             </Detail>
             <Detail icon={Coins} label="Price per kg">
-              {trip.pricePerKg ? trip.pricePerKg.toString() : "On contact"}
+              {trip.pricePerKg ? `฿${trip.pricePerKg.toString()}` : "On contact"}
             </Detail>
             {trip.itemRestrictions && (
               <Detail icon={PackageX} label="Restrictions">
