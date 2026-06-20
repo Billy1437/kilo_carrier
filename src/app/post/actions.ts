@@ -1,11 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { tripSchema } from "@/lib/trip-schema";
 import { expiryFromTravelDate } from "@/lib/trips";
+import { TRIPS_TAG } from "@/lib/queries";
 
 export type PostState = { error?: string };
 
@@ -60,6 +61,7 @@ export async function createTrip(
     },
   });
 
+  revalidateTag(TRIPS_TAG, "max");
   revalidatePath("/browse");
   redirect(`/trips/${trip.id}`);
 }
@@ -101,6 +103,7 @@ export async function updateTrip(
     },
   });
 
+  revalidateTag(TRIPS_TAG, "max");
   revalidatePath("/browse");
   revalidatePath(`/trips/${id}`);
   redirect(`/trips/${id}`);
@@ -115,6 +118,7 @@ export async function deleteTrip(id: string) {
   }
 
   await prisma.trip.delete({ where: { id } });
+  revalidateTag(TRIPS_TAG, "max");
   revalidatePath("/browse");
   redirect("/my-trips");
 }

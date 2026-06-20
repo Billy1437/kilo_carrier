@@ -11,7 +11,7 @@ import {
   Link2,
   Plus,
 } from "lucide-react";
-import { prisma } from "@/lib/prisma";
+import { getLanding } from "@/lib/queries";
 import { TripCard, type TripCardData } from "@/components/trip-card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -68,40 +68,13 @@ const FAQS = [
 ];
 
 export default async function LandingPage() {
-  const activeWhere = { expiresAt: { gt: new Date() } };
+  const { trips: dtos, totalTrips, totalKg, toBkk, toYgn } = await getLanding();
 
-  const [recent, agg, grouped] = await Promise.all([
-    prisma.trip.findMany({
-      where: activeWhere,
-      orderBy: { createdAt: "desc" },
-      take: 3,
-    }),
-    prisma.trip.aggregate({
-      where: activeWhere,
-      _count: { _all: true },
-      _sum: { availableKg: true },
-    }),
-    prisma.trip.groupBy({
-      by: ["direction"],
-      where: activeWhere,
-      _count: { _all: true },
-    }),
-  ]);
-
-  const trips: TripCardData[] = recent.map((t) => ({
-    id: t.id,
-    direction: t.direction,
-    travelDate: t.travelDate,
-    availableKg: t.availableKg.toString(),
-    pricePerKg: t.pricePerKg ? t.pricePerKg.toString() : null,
-    carrierName: t.carrierName,
-    telegram: t.telegram,
+  const trips: TripCardData[] = dtos.map((t) => ({
+    ...t,
+    travelDate: new Date(t.travelDate),
   }));
 
-  const totalTrips = agg._count._all;
-  const totalKg = agg._sum.availableKg ? Math.round(Number(agg._sum.availableKg)) : 0;
-  const toBkk = grouped.find((g) => g.direction === "YGN_TO_BKK")?._count._all ?? 0;
-  const toYgn = grouped.find((g) => g.direction === "BKK_TO_YGN")?._count._all ?? 0;
   const maxDir = Math.max(toBkk, toYgn, 1);
 
   return (
