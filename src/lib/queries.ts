@@ -23,7 +23,10 @@ export type TripFilters = {
 };
 
 function buildWhere(f: TripFilters): Prisma.TripWhereInput {
-  const where: Prisma.TripWhereInput = { expiresAt: { gt: new Date() } };
+  const where: Prisma.TripWhereInput = {
+    status: "ACTIVE",
+    expiresAt: { gt: new Date() },
+  };
   if (f.direction === "YGN_TO_BKK" || f.direction === "BKK_TO_YGN") {
     where.direction = f.direction as Direction;
   }
@@ -64,7 +67,7 @@ function toDTO(t: {
 /** Browse listing + stats, cached and tagged so mutations can bust it. */
 export const getBrowse = unstable_cache(
   async (f: TripFilters) => {
-    const activeWhere: Prisma.TripWhereInput = { expiresAt: { gt: new Date() } };
+    const activeWhere: Prisma.TripWhereInput = { status: "ACTIVE", expiresAt: { gt: new Date() } };
     const soonDate = new Date();
     soonDate.setDate(soonDate.getDate() + 3);
 
@@ -101,7 +104,7 @@ export const getBrowse = unstable_cache(
 /** Landing: recent trips + aggregate stats, cached + tagged. */
 export const getLanding = unstable_cache(
   async () => {
-    const activeWhere: Prisma.TripWhereInput = { expiresAt: { gt: new Date() } };
+    const activeWhere: Prisma.TripWhereInput = { status: "ACTIVE", expiresAt: { gt: new Date() } };
     const [recent, agg, grouped] = await Promise.all([
       prisma.trip.findMany({
         where: activeWhere,

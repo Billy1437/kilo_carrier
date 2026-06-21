@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath, revalidateTag } from "next/cache";
+import type { TripStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { tripSchema } from "@/lib/trip-schema";
@@ -30,11 +31,23 @@ function parseForm(formData: FormData) {
   return tripSchema.safeParse(raw);
 }
 
+const MAX_ACTIVE_TRIPS = 10;
+
 export async function createTrip(
   _prev: PostState,
   formData: FormData,
 ): Promise<PostState> {
   const userId = await requireUserId();
+
+  // Anti-spam: cap how many live trips one account can hold.
+  const activeCount = await prisma.trip.count({
+    where: { userId, status: "ACTIVE", expiresAt: { gt: new Date() } },
+  });
+  if (activeCount >= MAX_ACTIVE_TRIPS) {
+    return {
+      error: `You already have ${MAX_ACTIVE_TRIPS} active trips. Mark some as full or completed before posting more.`,
+    };
+  }
 
   const parsed = parseForm(formData);
   if (!parsed.success) {
@@ -121,4 +134,19 @@ export async function deleteTrip(id: string) {
   revalidateTag(TRIPS_TAG, "max");
   revalidatePath("/browse");
   redirect("/my-trips");
+}
+
+export async function setTripStatus(id: string, status: TripStatus) {
+  const userId = await requireUserId();
+
+  const existing = await prisma.trip.findUnique({ where: { id } });
+  if (!existing || existing.userId !== userId) {
+    redirect(`/trips/${id}`);
+  }
+
+  await prisma.trip.update({ where: { id }, data: { status } });
+  revalidateTag(TRIPS_TAG, "max");
+  revalidatePath("/browse");
+  revalidatePath("/my-trips");
+  revalidatePath(`/trips/${id}`);
 }

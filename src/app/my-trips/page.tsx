@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { deleteTrip } from "@/app/post/actions";
 import { directionLabel, formatDate } from "@/lib/trips";
+import { StatusBadge, StatusControls } from "@/components/trip-status";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -65,10 +66,11 @@ export default async function MyTripsPage() {
                   <Plane className="size-5" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-bold tracking-tight">
                       {directionLabel(t.direction)}
                     </h3>
+                    <StatusBadge status={t.status} />
                     {expired && (
                       <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                         Expired
@@ -79,6 +81,9 @@ export default async function MyTripsPage() {
                     {formatDate(t.travelDate)} · {t.availableKg.toString()} kg
                     {t.pricePerKg ? ` · ฿${t.pricePerKg.toString()}/kg` : ""}
                   </p>
+                  <div className="mt-3">
+                    <StatusControls id={t.id} status={t.status} />
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2">

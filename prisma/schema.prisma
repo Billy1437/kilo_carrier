@@ -13,14 +13,21 @@ enum Direction {
   BKK_TO_YGN
 }
 
+enum TripStatus {
+  ACTIVE
+  FULL
+  COMPLETED
+}
+
 /// A carrier's posted trip with spare luggage capacity (YGN <-> BKK only).
 model Trip {
   id               String    @id @default(uuid()) @db.Uuid
   /// Supabase auth.users id of the owner (logical ref; no DB-level FK across schemas).
   userId           String    @map("user_id") @db.Uuid
-  carrierName      String    @map("carrier_name")
+  carrierName      String     @map("carrier_name")
   direction        Direction
-  travelDate       DateTime  @map("travel_date") @db.Date
+  status           TripStatus @default(ACTIVE)
+  travelDate       DateTime   @map("travel_date") @db.Date
   availableKg      Decimal   @map("available_kg") @db.Decimal(4, 1)
   pricePerKg       Decimal?  @map("price_per_kg") @db.Decimal(10, 2)
   itemRestrictions String?   @map("item_restrictions")

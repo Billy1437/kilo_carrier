@@ -26,6 +26,7 @@ import {
 } from "@/lib/trips";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { CopyLinkButton } from "@/components/copy-link-button";
+import { StatusBadge, StatusControls } from "@/components/trip-status";
 import { cn } from "@/lib/utils";
 
 export default async function TripDetailPage({
@@ -43,6 +44,14 @@ export default async function TripDetailPage({
   const isOwner = claimsData?.claims?.sub === trip.userId;
 
   const expired = trip.expiresAt.getTime() < Date.now();
+
+  // Phase 1 trust signals — factual, computed from this carrier's listings (not self-reported).
+  const [tripsListed, pastTrips] = await Promise.all([
+    prisma.trip.count({ where: { userId: trip.userId } }),
+    prisma.trip.count({
+      where: { userId: trip.userId, travelDate: { lt: new Date() } },
+    }),
+  ]);
 
   const contacts = [
     {
@@ -78,9 +87,12 @@ export default async function TripDetailPage({
       <div className="mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm">
         <div className="border-b bg-accent/40 p-6">
           <div className="flex items-start justify-between gap-4">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm">
-              <Plane className="size-3.5 text-primary" /> Air cargo space
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+                <Plane className="size-3.5 text-primary" /> Air cargo space
+              </span>
+              {trip.status !== "ACTIVE" && <StatusBadge status={trip.status} />}
+            </div>
             {isOwner && (
               <div className="flex items-center gap-2">
                 <Link
@@ -108,6 +120,14 @@ export default async function TripDetailPage({
           <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
             {directionLabel(trip.direction)}
           </h1>
+          {isOwner && (
+            <div className="mt-4 border-t border-border/60 pt-4">
+              <p className="mb-2 text-xs font-medium text-muted-foreground">
+                Update availability
+              </p>
+              <StatusControls id={trip.id} status={trip.status} />
+            </div>
+          )}
         </div>
 
         <div className="space-y-6 p-6">
@@ -120,6 +140,19 @@ export default async function TripDetailPage({
           <div>
             <p className="text-sm text-muted-foreground">Carrier</p>
             <p className="text-lg font-semibold">{trip.carrierName}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <span className="rounded-full bg-sky px-2.5 py-1 text-xs font-medium text-sky-foreground">
+                {tripsListed} {tripsListed === 1 ? "trip" : "trips"} listed
+              </span>
+              {pastTrips > 0 && (
+                <span className="rounded-full bg-lime px-2.5 py-1 text-xs font-medium text-lime-foreground">
+                  {pastTrips} past {pastTrips === 1 ? "trip" : "trips"}
+                </span>
+              )}
+            </div>
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              Trip history on KiloCarrier — verify details directly with the carrier.
+            </p>
           </div>
 
           <dl className="grid gap-4 sm:grid-cols-2">
