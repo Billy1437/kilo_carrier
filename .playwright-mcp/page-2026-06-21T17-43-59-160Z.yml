@@ -1,0 +1,30 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - banner [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e14] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e16]
+          - generic [ref=e17]: KiloCarrier
+        - navigation [ref=e18]:
+          - link "Browse" [ref=e19] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e20]
+            - text: Browse
+          - link "Post a trip" [ref=e23] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e24]
+            - text: Post a trip
+      - link "Log in" [ref=e26] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e27]:
+    - generic [ref=e28]:
+      - img [ref=e30]
+      - heading "This trip is no longer available" [level=1] [ref=e36]
+      - paragraph [ref=e37]: The carrier may have removed it or it has already departed. Browse the latest trips to find another carrier.
+      - link "Browse trips" [ref=e38] [cursor=pointer]:
+        - /url: /browse
+  - region "Notifications alt+T"
+  - alert [ref=e39]

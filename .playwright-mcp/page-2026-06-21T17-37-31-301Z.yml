@@ -1,0 +1,76 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+      - link "Log in" [ref=e17] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - link "← Back to browse" [ref=e20] [cursor=pointer]:
+        - /url: /browse
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e25]:
+            - img [ref=e26]
+            - text: Air cargo space
+          - heading "Bangkok → Yangon" [level=1] [ref=e28]
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - paragraph [ref=e31]: Carrier
+            - paragraph [ref=e32]: Min Phone Thit
+            - generic [ref=e34]: 1 trip listed
+            - paragraph [ref=e35]: Trip history on KiloCarrier — verify details directly with the carrier.
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - img [ref=e38]
+              - generic [ref=e40]:
+                - term [ref=e41]: Travel date
+                - definition [ref=e42]: Tue, 23 Jun 2026
+            - generic [ref=e43]:
+              - img [ref=e44]
+              - generic [ref=e49]:
+                - term [ref=e50]: Available space
+                - definition [ref=e51]: 40 kg
+            - generic [ref=e52]:
+              - img [ref=e53]
+              - generic [ref=e58]:
+                - term [ref=e59]: Price per kg
+                - definition [ref=e60]: ฿350
+            - generic [ref=e61]:
+              - img [ref=e62]
+              - generic [ref=e68]:
+                - term [ref=e69]: Restrictions
+                - definition [ref=e70]: no liquids
+          - generic [ref=e71]:
+            - paragraph [ref=e72]: Notes
+            - paragraph [ref=e73]: this is currently for testing purpose only
+          - generic [ref=e74]:
+            - paragraph [ref=e75]: Contact the carrier
+            - generic [ref=e76]:
+              - link "Telegram" [ref=e77] [cursor=pointer]:
+                - /url: https://t.me/kae12345
+                - img
+                - text: Telegram
+              - link "Facebook" [ref=e78] [cursor=pointer]:
+                - /url: https://www.facebook.com/share/1WAdrMAhCT/?mibextid=wwXIfr
+                - img
+                - text: Facebook
+              - button "Copy link" [ref=e79]:
+                - img
+                - text: Copy link
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e85] [cursor=pointer]:
+    - img [ref=e86]

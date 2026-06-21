@@ -1,0 +1,92 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+      - link "Log in" [ref=e17] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - heading "Browse trips" [level=1] [ref=e22]
+          - paragraph [ref=e23]: Cargo space between Yangon and Bangkok. Travel light, send smart.
+        - link "Post a trip" [ref=e24] [cursor=pointer]:
+          - /url: /post
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - paragraph [ref=e27]: Active trips
+          - paragraph [ref=e28]: "1"
+        - generic [ref=e29]:
+          - paragraph [ref=e30]: To Bangkok
+          - paragraph [ref=e31]: "0"
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: To Yangon
+          - paragraph [ref=e34]: "1"
+        - generic [ref=e35]:
+          - paragraph [ref=e36]: Departing soon
+          - paragraph [ref=e37]: "1"
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - img [ref=e41]
+            - generic [ref=e43]: Departing
+            - textbox [ref=e44]
+          - generic [ref=e45]:
+            - img [ref=e46]
+            - generic [ref=e51]: Min kg
+            - spinbutton [ref=e52]
+          - generic [ref=e53]:
+            - img [ref=e54]
+            - generic [ref=e59]: Max / kg
+            - spinbutton [ref=e60]
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - button "All trips(1)" [ref=e63]:
+              - text: All trips
+              - generic [ref=e64]: (1)
+            - button "YGN → BKK" [ref=e65]
+            - button "BKK → YGN" [ref=e66]
+          - generic [ref=e67]:
+            - text: Sort by
+            - combobox "Sort by" [ref=e68]:
+              - option "Newest" [selected]
+              - option "Soonest"
+              - option "Cheapest"
+      - link "Tomorrow Bangkok → Yangon Tue, 23 Jun 2026 Available space 40 / 50 kg Price ฿350 / kg M Min Phone Thit @kae12345" [ref=e71] [cursor=pointer]:
+        - /url: /trips/e98f2c69-b95a-4160-95c8-457887d6fa6f
+        - generic [ref=e72]:
+          - img [ref=e74]
+          - generic [ref=e76]: Tomorrow
+        - generic [ref=e77]:
+          - heading "Bangkok → Yangon" [level=3] [ref=e78]
+          - paragraph [ref=e79]: Tue, 23 Jun 2026
+        - generic [ref=e81]:
+          - generic [ref=e82]: Available space
+          - generic [ref=e83]: 40 / 50 kg
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - paragraph [ref=e88]: Price
+            - paragraph [ref=e89]:
+              - text: ฿350
+              - generic [ref=e90]: / kg
+          - img [ref=e92]
+        - generic [ref=e95]:
+          - generic [ref=e96]: M
+          - generic [ref=e97]: Min Phone Thit
+          - generic [ref=e98]: "@kae12345"
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e104] [cursor=pointer]:
+    - img [ref=e105]

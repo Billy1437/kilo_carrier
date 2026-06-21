@@ -167,7 +167,7 @@ export default async function LandingPage() {
           {CHANNELS.map((c) => (
             <span
               key={c.label}
-              className="flex items-center gap-2 text-foreground/40 transition hover:text-foreground"
+              className="flex items-center gap-2 text-foreground/65 transition hover:text-foreground"
             >
               <c.icon className="size-5" />
               <span className="text-lg font-semibold">{c.label}</span>
@@ -265,7 +265,7 @@ export default async function LandingPage() {
             <h2 className="font-display text-3xl font-light tracking-tight sm:text-4xl">
               Flying YGN ⇄ BKK? Turn spare kilos into cash.
             </h2>
-            <p className="mt-3 text-olive-foreground/75">
+            <p className="mt-3 text-olive-foreground/90">
               Post your trip in under a minute. Keep 100% of what you charge.
             </p>
           </div>
