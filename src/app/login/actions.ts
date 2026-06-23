@@ -12,13 +12,34 @@ function safeNext(next: FormDataEntryValue | null): string {
   return v.startsWith("/") && !v.startsWith("//") ? v : "/";
 }
 
+// Coerce missing/file form values to "" so validation produces a friendly
+// field message instead of a raw "expected string, received null" Zod error.
+function str(v: FormDataEntryValue | null): string {
+  return typeof v === "string" ? v : "";
+}
+
+/**
+ * Single entry point for the auth form. Branches on the `mode` field so the
+ * form never swaps which action `useActionState` is bound to (that desync was
+ * causing signUp to run against the sign-in form and read a null
+ * confirmPassword).
+ */
+export async function authenticate(
+  prev: AuthState,
+  formData: FormData,
+): Promise<AuthState> {
+  return formData.get("mode") === "signup"
+    ? signUp(prev, formData)
+    : signIn(prev, formData);
+}
+
 export async function signIn(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
   const parsed = signInSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
+    email: str(formData.get("email")),
+    password: str(formData.get("password")),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid details" };
@@ -37,9 +58,9 @@ export async function signUp(
   formData: FormData,
 ): Promise<AuthState> {
   const parsed = signUpSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
+    email: str(formData.get("email")),
+    password: str(formData.get("password")),
+    confirmPassword: str(formData.get("confirmPassword")),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid details" };

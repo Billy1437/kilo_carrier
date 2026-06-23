@@ -1,0 +1,98 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+          - link "My trips" [ref=e16] [cursor=pointer]:
+            - /url: /my-trips
+            - img [ref=e17]
+            - text: My trips
+      - generic [ref=e21]:
+        - generic [ref=e22]: Hi, minphonethit456 👋
+        - generic [ref=e23]: M
+        - button "Sign out" [ref=e24]
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "Browse trips" [level=1] [ref=e29]
+          - paragraph [ref=e30]: Cargo space between Yangon and Bangkok. Travel light, send smart.
+        - link "Post a trip" [ref=e31] [cursor=pointer]:
+          - /url: /post
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - paragraph [ref=e34]: Active trips
+          - paragraph [ref=e35]: "1"
+        - generic [ref=e36]:
+          - paragraph [ref=e37]: To Bangkok
+          - paragraph [ref=e38]: "0"
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: To Yangon
+          - paragraph [ref=e41]: "1"
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: Departing soon
+          - paragraph [ref=e44]: "1"
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e50]: Departing
+            - textbox [ref=e51]
+          - generic [ref=e52]:
+            - img [ref=e53]
+            - generic [ref=e58]: Min kg
+            - spinbutton [ref=e59]
+          - generic [ref=e60]:
+            - img [ref=e61]
+            - generic [ref=e66]: Max / kg
+            - spinbutton [ref=e67]
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - button "All trips(1)" [ref=e70]:
+              - text: All trips
+              - generic [ref=e71]: (1)
+            - button "YGN → BKK" [ref=e72]
+            - button "BKK → YGN" [ref=e73]
+          - generic [ref=e74]:
+            - text: Sort by
+            - combobox "Sort by" [ref=e75]:
+              - option "Newest" [selected]
+              - option "Soonest"
+              - option "Cheapest"
+      - link "Today Bangkok → Yangon Tue, 23 Jun 2026 Available space 40 / 50 kg Price ฿350 / kg M Min Phone Thit @kae12345" [ref=e78] [cursor=pointer]:
+        - /url: /trips/e98f2c69-b95a-4160-95c8-457887d6fa6f
+        - generic [ref=e79]:
+          - img [ref=e81]
+          - generic [ref=e83]: Today
+        - generic [ref=e84]:
+          - heading "Bangkok → Yangon" [level=3] [ref=e85]
+          - paragraph [ref=e86]: Tue, 23 Jun 2026
+        - generic [ref=e88]:
+          - generic [ref=e89]: Available space
+          - generic [ref=e90]: 40 / 50 kg
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - paragraph [ref=e95]: Price
+            - paragraph [ref=e96]:
+              - text: ฿350
+              - generic [ref=e97]: / kg
+          - img [ref=e99]
+        - generic [ref=e102]:
+          - generic [ref=e103]: M
+          - generic [ref=e104]: Min Phone Thit
+          - generic [ref=e105]: "@kae12345"
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e111] [cursor=pointer]:
+    - img [ref=e112]

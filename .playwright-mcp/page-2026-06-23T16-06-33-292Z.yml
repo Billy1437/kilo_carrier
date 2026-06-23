@@ -1,0 +1,54 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+          - link "My trips" [ref=e16] [cursor=pointer]:
+            - /url: /my-trips
+            - img [ref=e17]
+            - text: My trips
+      - generic [ref=e21]:
+        - generic [ref=e22]: Hi, minphonethit456 👋
+        - generic [ref=e23]: M
+        - button "Sign out" [ref=e24]
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "My trips" [level=1] [ref=e29]
+          - paragraph [ref=e30]: Manage the listings you've posted.
+        - link "Post a trip" [ref=e31] [cursor=pointer]:
+          - /url: /post
+      - generic [ref=e33]:
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - heading "Bangkok → Yangon" [level=3] [ref=e39]
+            - generic [ref=e40]: Full
+          - paragraph [ref=e41]: Wed, 15 Jul 2026 · 25 kg · ฿300/kg
+          - generic [ref=e43]:
+            - button "Reopen" [ref=e45]
+            - button "Mark completed" [ref=e47]
+        - generic [ref=e48]:
+          - link "Edit" [ref=e49] [cursor=pointer]:
+            - /url: /trips/bac6d1e0-f3c5-42d2-94dd-81b385f6e260/edit
+            - img
+            - text: Edit
+          - button "Delete" [ref=e51]:
+            - img
+            - text: Delete
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e57] [cursor=pointer]:
+    - img [ref=e58]

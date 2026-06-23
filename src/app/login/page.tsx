@@ -4,7 +4,7 @@ import { Suspense, useActionState, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { signIn, signUp, type AuthState } from "./actions";
+import { authenticate, type AuthState } from "./actions";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,14 +19,13 @@ import {
 
 const initial: AuthState = {};
 
+type Mode = "signin" | "signup";
+
 function LoginInner() {
   const params = useSearchParams();
   const next = params.get("next") ?? "/";
   const urlError = params.get("error");
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [showPwd, setShowPwd] = useState(false);
-  const action = mode === "signin" ? signIn : signUp;
-  const [state, formAction, pending] = useActionState(action, initial);
+  const [mode, setMode] = useState<Mode>("signin");
 
   async function handleGoogle() {
     const supabase = createClient();
@@ -70,109 +69,139 @@ function LoginInner() {
             <span className="h-px flex-1 bg-border" />
           </div>
 
-          <form action={formAction} className="space-y-4">
-            <input type="hidden" name="next" value={next} />
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  name="password"
-                  type={showPwd ? "text" : "password"}
-                  autoComplete={
-                    mode === "signin" ? "current-password" : "new-password"
-                  }
-                  minLength={6}
-                  required
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPwd((v) => !v)}
-                  aria-label={showPwd ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPwd ? (
-                    <EyeOff className="size-4" />
-                  ) : (
-                    <Eye className="size-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {mode === "signup" && (
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm password</Label>
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showPwd ? "text" : "password"}
-                    autoComplete="new-password"
-                    minLength={6}
-                    required
-                    className="pr-10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPwd((v) => !v)}
-                    aria-label={showPwd ? "Hide password" : "Show password"}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showPwd ? (
-                      <EyeOff className="size-4" />
-                    ) : (
-                      <Eye className="size-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {(state.error || urlError) && (
-              <p className="text-sm text-destructive">
-                {state.error ?? urlError}
-              </p>
-            )}
-            {state.message && (
-              <p className="text-sm text-emerald-600">{state.message}</p>
-            )}
-
-            <Button type="submit" className="w-full" disabled={pending}>
-              {pending
-                ? "Please wait…"
-                : mode === "signin"
-                  ? "Log in"
-                  : "Sign up"}
-            </Button>
-          </form>
-
-          <p className="text-center text-sm text-muted-foreground">
-            {mode === "signin" ? "No account?" : "Already have an account?"}{" "}
-            <button
-              type="button"
-              className="font-medium text-primary underline-offset-4 hover:underline"
-              onClick={() =>
-                setMode((m) => (m === "signin" ? "signup" : "signin"))
-              }
-            >
-              {mode === "signin" ? "Sign up" : "Log in"}
-            </button>
-          </p>
+          {/* key={mode} remounts the form on toggle, resetting useActionState
+              so a stale error/fields from the other mode never carry over. */}
+          <AuthForm
+            key={mode}
+            mode={mode}
+            next={next}
+            urlError={urlError}
+            onToggleMode={() =>
+              setMode((m) => (m === "signin" ? "signup" : "signin"))
+            }
+          />
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+function AuthForm({
+  mode,
+  next,
+  urlError,
+  onToggleMode,
+}: {
+  mode: Mode;
+  next: string;
+  urlError: string | null;
+  onToggleMode: () => void;
+}) {
+  const [showPwd, setShowPwd] = useState(false);
+  const [state, formAction, pending] = useActionState(authenticate, initial);
+
+  return (
+    <>
+      <form action={formAction} className="space-y-4">
+        <input type="hidden" name="next" value={next} />
+        <input type="hidden" name="mode" value={mode} />
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <div className="relative">
+            <Input
+              id="password"
+              name="password"
+              type={showPwd ? "text" : "password"}
+              autoComplete={
+                mode === "signin" ? "current-password" : "new-password"
+              }
+              minLength={6}
+              required
+              className="pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPwd((v) => !v)}
+              aria-label={showPwd ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showPwd ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {mode === "signup" && (
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm password</Label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showPwd ? "text" : "password"}
+                autoComplete="new-password"
+                minLength={6}
+                required
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPwd((v) => !v)}
+                aria-label={showPwd ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPwd ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {(state.error || urlError) && (
+          <p className="text-sm text-destructive">
+            {state.error ?? urlError}
+          </p>
+        )}
+        {state.message && (
+          <p className="text-sm text-emerald-600">{state.message}</p>
+        )}
+
+        <Button type="submit" className="w-full" disabled={pending}>
+          {pending
+            ? "Please wait…"
+            : mode === "signin"
+              ? "Log in"
+              : "Sign up"}
+        </Button>
+      </form>
+
+      <p className="text-center text-sm text-muted-foreground">
+        {mode === "signin" ? "No account?" : "Already have an account?"}{" "}
+        <button
+          type="button"
+          className="font-medium text-primary underline-offset-4 hover:underline"
+          onClick={onToggleMode}
+        >
+          {mode === "signin" ? "Sign up" : "Log in"}
+        </button>
+      </p>
+    </>
   );
 }
 

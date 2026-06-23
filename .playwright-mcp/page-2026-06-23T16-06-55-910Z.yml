@@ -1,0 +1,100 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+          - link "My trips" [ref=e16] [cursor=pointer]:
+            - /url: /my-trips
+            - img [ref=e17]
+            - text: My trips
+      - generic [ref=e21]:
+        - generic [ref=e22]: Hi, minphonethit456 👋
+        - generic [ref=e23]: M
+        - button "Sign out" [ref=e24]
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - link "← Back to trip" [ref=e27] [cursor=pointer]:
+        - /url: /trips/bac6d1e0-f3c5-42d2-94dd-81b385f6e260
+      - heading "Edit trip" [level=1] [ref=e28]
+      - paragraph [ref=e29]: Update your listing details.
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - heading "Trip details" [level=2] [ref=e33]
+          - generic [ref=e34]:
+            - generic [ref=e35]: Direction
+            - generic [ref=e36]:
+              - button "YGN → BKK" [ref=e37]:
+                - img [ref=e38]
+                - generic [ref=e40]: YGN → BKK
+              - button "BKK → YGN" [ref=e41]:
+                - img [ref=e42]
+                - generic [ref=e44]: BKK → YGN
+          - generic [ref=e45]:
+            - generic [ref=e46]: Your name
+            - textbox "Your name" [ref=e47]: QA TEST CARRIER
+          - generic [ref=e48]:
+            - generic [ref=e49]:
+              - generic [ref=e50]: Travel date
+              - textbox "Travel date" [ref=e51]: 2026-07-15
+            - generic [ref=e52]:
+              - generic [ref=e53]: Available kg
+              - spinbutton "Available kg" [ref=e54]: "25"
+            - generic [ref=e55]:
+              - generic [ref=e56]: Price / kg (Baht)
+              - spinbutton "Price / kg (Baht)" [ref=e57]: "300"
+          - generic [ref=e58]:
+            - generic [ref=e59]: Item restrictions
+            - textbox "Item restrictions" [ref=e60]:
+              - /placeholder: No liquids, documents only…
+          - generic [ref=e61]:
+            - generic [ref=e62]: Notes
+            - textbox "Notes" [ref=e63]:
+              - /placeholder: Anything senders should know…
+              - text: QA automated test trip - safe to delete
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - heading "How senders reach you" [level=2] [ref=e66]
+            - paragraph [ref=e67]: Telegram is required. Add others if you like.
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - generic [ref=e70]:
+                - img [ref=e71]
+                - text: Telegram
+                - generic [ref=e74]: "*"
+              - textbox "Telegram *" [ref=e75]:
+                - /placeholder: "@username"
+                - text: "@qatestflow"
+            - generic [ref=e76]:
+              - generic [ref=e77]:
+                - img [ref=e78]
+                - text: WhatsApp
+              - textbox "WhatsApp" [ref=e80]:
+                - /placeholder: +66…
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - img [ref=e83]
+                - text: Viber
+              - textbox "Viber" [ref=e85]:
+                - /placeholder: +95…
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - img [ref=e88]
+                - text: Facebook
+              - textbox "Facebook" [ref=e91]:
+                - /placeholder: facebook.com/you
+        - button "Save changes" [ref=e92]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e98] [cursor=pointer]:
+    - img [ref=e99]

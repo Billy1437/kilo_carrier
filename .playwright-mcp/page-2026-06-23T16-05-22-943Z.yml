@@ -1,0 +1,90 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+          - link "My trips" [ref=e16] [cursor=pointer]:
+            - /url: /my-trips
+            - img [ref=e17]
+            - text: My trips
+      - generic [ref=e21]:
+        - generic [ref=e22]: Hi, minphonethit456 👋
+        - generic [ref=e23]: M
+        - button "Sign out" [ref=e24]
+  - main [ref=e25]:
+    - generic [ref=e102]:
+      - link "← Back to browse" [ref=e103] [cursor=pointer]:
+        - /url: /browse
+      - generic [ref=e104]:
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - generic [ref=e108]:
+                - img [ref=e109]
+                - text: Air cargo space
+              - generic [ref=e163]: Full
+            - generic [ref=e111]:
+              - link "Edit" [ref=e112] [cursor=pointer]:
+                - /url: /trips/bac6d1e0-f3c5-42d2-94dd-81b385f6e260/edit
+                - img
+                - text: Edit
+              - button "Delete" [ref=e114]:
+                - img
+                - text: Delete
+          - heading "Bangkok → Yangon" [level=1] [ref=e115]
+          - generic [ref=e116]:
+            - paragraph [ref=e117]: Update availability
+            - generic [ref=e118]:
+              - button "Reopen" [ref=e165]
+              - button "Mark completed" [ref=e122]
+        - generic [ref=e123]:
+          - generic [ref=e124]:
+            - paragraph [ref=e125]: Carrier
+            - paragraph [ref=e126]: QA TEST CARRIER
+            - generic [ref=e128]: 1 trip listed
+            - paragraph [ref=e129]: Trip history on KiloCarrier — verify details directly with the carrier.
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - img [ref=e132]
+              - generic [ref=e134]:
+                - term [ref=e135]: Travel date
+                - definition [ref=e136]: Wed, 15 Jul 2026
+            - generic [ref=e137]:
+              - img [ref=e138]
+              - generic [ref=e143]:
+                - term [ref=e144]: Available space
+                - definition [ref=e145]: 25 kg
+            - generic [ref=e146]:
+              - img [ref=e147]
+              - generic [ref=e152]:
+                - term [ref=e153]: Price per kg
+                - definition [ref=e154]: ฿300
+          - generic [ref=e155]:
+            - paragraph [ref=e156]: Notes
+            - paragraph [ref=e157]: QA automated test trip - safe to delete
+          - generic [ref=e158]:
+            - paragraph [ref=e159]: Contact the carrier
+            - generic [ref=e160]:
+              - link "Telegram" [ref=e161] [cursor=pointer]:
+                - /url: https://t.me/qatestflow
+                - img
+                - text: Telegram
+              - button "Copy link" [ref=e162]:
+                - img
+                - text: Copy link
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e97] [cursor=pointer]:
+    - img [ref=e98]
+  - alert [ref=e101]: KiloCarrier — Travel light. Send smart.

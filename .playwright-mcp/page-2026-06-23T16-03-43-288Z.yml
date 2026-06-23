@@ -1,0 +1,168 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+          - link "My trips" [ref=e54] [cursor=pointer]:
+            - /url: /my-trips
+            - img [ref=e55]
+            - text: My trips
+      - generic [ref=e58]:
+        - generic [ref=e59]: Hi, minphonethit456 👋
+        - generic [ref=e60]: M
+        - button "Sign out" [ref=e61]
+  - main [ref=e18]:
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - paragraph [ref=e64]: Yangon ⇄ Bangkok · peer-to-peer cargo
+        - heading "Send it lighter." [level=1] [ref=e65]
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Find a traveller with spare luggage space and send your parcel across the border the same day — cheaper than courier, with zero platform fees.
+          - generic [ref=e68]:
+            - link "Browse trips" [ref=e69] [cursor=pointer]:
+              - /url: /browse
+              - text: Browse trips
+              - img
+            - link "Post a trip" [ref=e70] [cursor=pointer]:
+              - /url: /post
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Trips › Overview
+            - generic [ref=e77]: All routes (1) ▾
+          - generic [ref=e78]:
+            - generic [ref=e79]: 40 kg
+            - generic [ref=e80]: of spare space available now
+          - generic [ref=e81]:
+            - generic [ref=e83]:
+              - generic [ref=e84]: Yangon → Bangkok
+              - generic [ref=e85]: 0 trips
+            - generic [ref=e89]:
+              - generic [ref=e90]: Bangkok → Yangon
+              - generic [ref=e91]: 1 trips
+      - generic [ref=e94]:
+        - paragraph [ref=e95]: Reach carriers on
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - img [ref=e98]
+            - generic [ref=e101]: Telegram
+          - generic [ref=e102]:
+            - img [ref=e103]
+            - generic [ref=e105]: WhatsApp
+          - generic [ref=e106]:
+            - img [ref=e107]
+            - generic [ref=e109]: Viber
+          - generic [ref=e110]:
+            - img [ref=e111]
+            - generic [ref=e114]: Facebook
+      - generic [ref=e115]:
+        - paragraph [ref=e116]: Benefits
+        - heading "We've cracked cross-border cargo." [level=2] [ref=e117]
+        - paragraph [ref=e118]: The cheapest, fastest way to move a parcel between Myanmar and Thailand — powered by people already making the trip.
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - img [ref=e121]
+            - heading "Direct contact" [level=3] [ref=e123]
+            - paragraph [ref=e124]: Message carriers on Telegram, WhatsApp or Viber. No middleman, no waiting on support.
+          - generic [ref=e125]:
+            - img [ref=e126]
+            - heading "Zero platform fees" [level=3] [ref=e129]
+            - paragraph [ref=e130]: You pay the carrier directly and agree your own price. KiloCarrier never takes a cut.
+          - generic [ref=e131]:
+            - img [ref=e132]
+            - heading "Same-day delivery" [level=3] [ref=e134]
+            - paragraph [ref=e135]: Your parcel flies the day your carrier does — far faster than traditional courier.
+          - generic [ref=e136]:
+            - img [ref=e137]
+            - heading "Trusted routes" [level=3] [ref=e140]
+            - paragraph [ref=e141]: Focused on Yangon ⇄ Bangkok, with a verified Telegram contact on every listing.
+      - generic [ref=e143]:
+        - heading "Two cities, one carry-on away." [level=2] [ref=e144]
+        - link "Browse every trip" [ref=e145] [cursor=pointer]:
+          - /url: /browse
+          - text: Browse every trip
+          - img [ref=e146]
+      - generic [ref=e148]:
+        - generic [ref=e149]:
+          - heading "Latest trips" [level=2] [ref=e150]
+          - link "Browse all" [ref=e151] [cursor=pointer]:
+            - /url: /browse
+            - text: Browse all
+            - img [ref=e152]
+        - link "Today Bangkok → Yangon Tue, 23 Jun 2026 Available space 40 / 50 kg Price ฿350 / kg M Min Phone Thit @kae12345" [ref=e156] [cursor=pointer]:
+          - /url: /trips/e98f2c69-b95a-4160-95c8-457887d6fa6f
+          - generic [ref=e157]:
+            - img [ref=e159]
+            - generic [ref=e161]: Today
+          - generic [ref=e162]:
+            - heading "Bangkok → Yangon" [level=3] [ref=e163]
+            - paragraph [ref=e164]: Tue, 23 Jun 2026
+          - generic [ref=e166]:
+            - generic [ref=e167]: Available space
+            - generic [ref=e168]: 40 / 50 kg
+          - generic [ref=e171]:
+            - generic [ref=e172]:
+              - paragraph [ref=e173]: Price
+              - paragraph [ref=e174]:
+                - text: ฿350
+                - generic [ref=e175]: / kg
+            - img [ref=e177]
+          - generic [ref=e180]:
+            - generic [ref=e181]: M
+            - generic [ref=e182]: Min Phone Thit
+            - generic [ref=e183]: "@kae12345"
+      - generic [ref=e184]:
+        - heading "Questions, answered." [level=2] [ref=e185]
+        - generic [ref=e186]:
+          - group [ref=e187]:
+            - generic "01 Is KiloCarrier safe to use?" [ref=e188] [cursor=pointer]:
+              - generic [ref=e189]: "01"
+              - generic [ref=e190]: Is KiloCarrier safe to use?
+              - img [ref=e191]
+          - group [ref=e192]:
+            - generic "02 How do I pay the carrier?" [ref=e193] [cursor=pointer]:
+              - generic [ref=e194]: "02"
+              - generic [ref=e195]: How do I pay the carrier?
+              - img [ref=e196]
+          - group [ref=e197]:
+            - generic "03 What can I send?" [ref=e198] [cursor=pointer]:
+              - generic [ref=e199]: "03"
+              - generic [ref=e200]: What can I send?
+              - img [ref=e201]
+          - group [ref=e202]:
+            - generic "04 How do I contact a carrier?" [ref=e203] [cursor=pointer]:
+              - generic [ref=e204]: "04"
+              - generic [ref=e205]: How do I contact a carrier?
+              - img [ref=e206]
+      - generic [ref=e208]:
+        - generic [ref=e209]:
+          - heading "Flying YGN ⇄ BKK? Turn spare kilos into cash." [level=2] [ref=e210]
+          - paragraph [ref=e211]: Post your trip in under a minute. Keep 100% of what you charge.
+        - link "Post a trip" [ref=e212] [cursor=pointer]:
+          - /url: /post
+          - text: Post a trip
+          - img [ref=e213]
+      - generic [ref=e216]:
+        - paragraph [ref=e217]: © 2026 KiloCarrier · Travel light. Send smart.
+        - navigation [ref=e218]:
+          - link "Browse" [ref=e219] [cursor=pointer]:
+            - /url: /browse
+          - link "Post a trip" [ref=e220] [cursor=pointer]:
+            - /url: /post
+          - link "Log in" [ref=e221] [cursor=pointer]:
+            - /url: /login
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e49] [cursor=pointer]:
+    - img [ref=e50]
+  - alert [ref=e53]

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push && npm run db:rls",
+    "db:rls": "node prisma/apply-rls.mjs",
     "db:studio": "prisma studio"
   },
   "dependencies": {

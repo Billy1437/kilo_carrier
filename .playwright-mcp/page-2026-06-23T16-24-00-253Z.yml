@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+      - link "Log in" [ref=e17] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e18]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: Log in
+        - generic [ref=e23]: Welcome back to KiloCarrier.
+      - generic [ref=e24]:
+        - button "Continue with Google" [ref=e25]:
+          - img
+          - text: Continue with Google
+        - generic [ref=e26]: or
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - generic [ref=e79]: Email
+            - textbox "Email" [ref=e80]
+          - generic [ref=e81]:
+            - generic [ref=e82]: Password
+            - generic [ref=e83]:
+              - textbox "Password" [ref=e84]
+              - button "Show password" [ref=e85]:
+                - img [ref=e86]
+          - button "Log in" [ref=e89]
+        - paragraph [ref=e90]:
+          - text: No account?
+          - button "Sign up" [ref=e91]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e49] [cursor=pointer]:
+    - img [ref=e50]
+  - alert [ref=e53]

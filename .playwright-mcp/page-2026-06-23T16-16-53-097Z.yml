@@ -1,0 +1,60 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "KiloCarrier logo KiloCarrier" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "KiloCarrier logo" [ref=e7]
+          - generic [ref=e8]: KiloCarrier
+        - navigation [ref=e9]:
+          - link "Browse" [ref=e10] [cursor=pointer]:
+            - /url: /browse
+            - img [ref=e11]
+            - text: Browse
+          - link "Post a trip" [ref=e14] [cursor=pointer]:
+            - /url: /post
+            - img [ref=e15]
+            - text: Post a trip
+          - link "My trips" [ref=e16] [cursor=pointer]:
+            - /url: /my-trips
+            - img [ref=e17]
+            - text: My trips
+      - generic [ref=e21]:
+        - generic [ref=e22]: Hi, minphonethit456 👋
+        - generic [ref=e23]: M
+        - button "Sign out" [ref=e24]
+  - main [ref=e25]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: Create account
+        - generic [ref=e30]: Post trips and carry cargo between Yangon & Bangkok.
+      - generic [ref=e31]:
+        - button "Continue with Google" [ref=e32]:
+          - img
+          - text: Continue with Google
+        - generic [ref=e33]: or
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - generic [ref=e38]: Email
+            - textbox "Email" [ref=e39]
+          - generic [ref=e40]:
+            - generic [ref=e41]: Password
+            - generic [ref=e42]:
+              - textbox "Password" [ref=e43]
+              - button "Show password" [ref=e44]:
+                - img [ref=e45]
+          - generic [ref=e62]:
+            - generic [ref=e63]: Confirm password
+            - generic [ref=e64]:
+              - textbox "Confirm password" [ref=e65]
+              - button "Show password" [ref=e66]:
+                - img [ref=e67]
+          - paragraph [ref=e61]: Invalid login credentials
+          - button "Sign up" [ref=e70]
+        - paragraph [ref=e49]:
+          - text: Already have an account?
+          - button "Log in" [active] [ref=e71]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e56] [cursor=pointer]:
+    - img [ref=e57]
+  - alert [ref=e60]
