@@ -39,6 +39,14 @@ export async function createTrip(
 ): Promise<PostState> {
   const userId = await requireUserId();
 
+  // Validate input before any DB work so invalid/spam submissions never hit
+  // the connection pool.
+  const parsed = parseForm(formData);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid form data" };
+  }
+  const d = parsed.data;
+
   // Anti-spam: cap how many live trips one account can hold.
   const activeCount = await prisma.trip.count({
     where: { userId, status: "ACTIVE", expiresAt: { gt: new Date() } },
@@ -48,12 +56,6 @@ export async function createTrip(
       error: `You already have ${MAX_ACTIVE_TRIPS} active trips. Mark some as full or completed before posting more.`,
     };
   }
-
-  const parsed = parseForm(formData);
-  if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Invalid form data" };
-  }
-  const d = parsed.data;
   const travelDate = new Date(d.travelDate);
 
   const trip = await prisma.trip.create({
