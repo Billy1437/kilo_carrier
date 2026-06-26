@@ -4,7 +4,7 @@
 
 Cheaper than courier, faster than cargo, with **zero platform fees** — carriers post their trips, senders browse and contact them directly on Telegram / WhatsApp / Viber / Facebook.
 
-![KiloCarrier landing](docs/screenshots/landing.png)
+![KiloCarrier landing](screenshots/landing.png)
 
 ---
 
@@ -22,11 +22,11 @@ Trips auto-expire after their travel date (filtered by `expiresAt > now()`).
 
 | Browse | Trip detail |
 |---|---|
-| ![Browse](docs/screenshots/browse.png) | ![Trip detail](docs/screenshots/trip-detail.png) |
+| ![Browse](screenshots/browse.png) | ![Trip detail](screenshots/trip-detail.png) |
 
 | Post a trip | Create account |
 |---|---|
-| ![Post](docs/screenshots/post.png) | ![Login](docs/screenshots/login.png) |
+| ![Post](screenshots/post.png) | ![Login](screenshots/login.png) |
 
 ---
 
