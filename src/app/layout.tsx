@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, Fraunces, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
@@ -39,6 +40,7 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <Toaster richColors position="top-center" />
+        <Analytics />
       </body>
     </html>
   );
